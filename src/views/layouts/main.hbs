@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{!--
+    <meta charset="utf-8" /> --}}
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Scraper Google Flight</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <link rel="icon" type="image/png" href="./favicon.png" />
+    <link rel="stylesheet" type="text/css" href="./bootstrap.min.css" />
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="./">Scraper Google Flight</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01"
+                aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarColor01">
+                <ul class="navbar-nav me-auto">
+                </ul>
+                <form id="search-form" class="d-flex">
+                    <input id="search-origin" class="form-control me-sm-2" type="text" placeholder="Origin" autocomplete="off">
+                    <input id="search-destination" class="form-control me-sm-2" type="text" placeholder="Destination" autocomplete="off">
+                    <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    {{{ body }}}
+
+    <script>
+
+        const launchScraper = async({ origin, destination }) => {
+
+            const response = await fetch(
+                `http://${location.host}/api/scraper/`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Accept": "application/json, text/plain, */*",
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ origin, destination })
+                }
+            );
+            return response.json();
+
+        } 
+        
+        document.addEventListener("DOMContentLoaded", async(event) => {
+        
+            document.querySelector("#search-form").addEventListener("submit", async(e) => {
+
+                e.preventDefault();
+                e.stopPropagation();
+
+                let origin = document.querySelector("#search-origin").value;
+                let destination = document.querySelector("#search-destination").value;
+
+                if (origin && destination) {
+
+                    await launchScraper({ origin, destination });
+                    window.location = `http://${location.host}`;
+
+                };
+
+            });
+
+        });
+
+    </script>
+
+</body>
+
+</html>

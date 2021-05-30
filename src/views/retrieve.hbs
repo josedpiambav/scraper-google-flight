@@ -1,0 +1,68 @@
+<div class="container py-4">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Price</th>
+                <th scope="col">Date</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+<script>
+
+    const getFlight = async({ flightId }) => {
+        const response = await fetch(
+            `http://${location.host}/api/flights/${flightId}`,
+            {
+                method: "GET",
+            }
+        );
+        return response.json();
+    }
+
+    const renderItineraries = (itineraries = []) => {
+
+        const bodyTable = document.querySelector("table.table.table-hover > tbody");
+
+        itineraries.forEach(itinerary => {
+
+            let { id, currency, price, createdAt } = itinerary;
+            if (createdAt) [ createdAt ] = createdAt.split("T");
+            let tagContainer = document.createElement("tr");
+            let tagId = document.createElement("th");
+            let tagPrice = document.createElement("td");
+            let tagDate = document.createElement("td");
+
+            tagId.setAttribute("scope", "row");
+            tagId.innerText = id;
+            tagPrice.innerText = price;
+            tagDate.innerText = createdAt;
+
+            tagContainer.appendChild(tagId);
+            tagContainer.appendChild(tagPrice);
+            tagContainer.appendChild(tagDate);
+            bodyTable.appendChild(tagContainer);
+
+        });
+
+    };
+    
+    document.addEventListener("DOMContentLoaded", async(event) => {
+
+        let flightId;
+        let { href } = location;
+        if (href) flightId = href.split("/").pop();
+
+        if (flightId) {
+
+            let { flight, itineraries } = await getFlight({ flightId });
+            renderItineraries(itineraries);
+
+        }
+
+    });
+
+</script>

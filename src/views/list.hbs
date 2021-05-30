@@ -1,0 +1,70 @@
+<div class="container py-4">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Origin</th>
+                <th scope="col">Destination</th>
+                <th scope="col">Date</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+<script>
+
+    const getListFlights = async() => {
+        const response = await fetch(
+            `http://${location.host}/api/flights/`,
+            {
+                method: "GET",
+            }
+        );
+        return response.json();
+    }
+
+    const renderFlights = (flights = []) => {
+
+        const bodyTable = document.querySelector("table.table.table-hover > tbody");
+
+        flights.forEach(flight => {
+
+            let { id, origin, destination, createdAt } = flight;
+            if (createdAt) [ createdAt ] = createdAt.split("T");
+            let tagContainer = document.createElement("tr");
+            let tagId = document.createElement("th");
+            let tagOrigin = document.createElement("td");
+            let tagDestination = document.createElement("td");
+            let tagDate = document.createElement("td");
+
+            tagContainer.setAttribute("flight-id", id);
+            tagContainer.addEventListener("click", (event) => {
+                let flightId = event.target.parentNode.getAttribute("flight-id");
+                if (flightId) window.location = `${location.origin}/${flightId}`;
+            });
+            tagId.setAttribute("scope", "row");
+            tagId.innerText = id;
+            tagOrigin.innerText = origin;
+            tagDestination.innerText = destination;
+            tagDate.innerText = createdAt;
+
+            tagContainer.appendChild(tagId);
+            tagContainer.appendChild(tagOrigin);
+            tagContainer.appendChild(tagDestination);
+            tagContainer.appendChild(tagDate);
+            bodyTable.appendChild(tagContainer);
+
+        });
+
+    };
+
+    document.addEventListener("DOMContentLoaded", async(event) => {
+        
+        const { flights } = await getListFlights();
+        renderFlights(flights);
+
+    });
+
+
+</script>
