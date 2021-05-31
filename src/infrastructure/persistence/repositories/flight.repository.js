@@ -5,13 +5,13 @@ class FlightRepository {
 
     constructor() {}
 
-    async list() {
+    async list({ where }) {
 
         let flights = [];
 
         try {
 
-            flights = await flightModel.findAll();
+            flights = await flightModel.findAll({ where });
             
         } catch (e) {
 
@@ -44,7 +44,7 @@ class FlightRepository {
 
     }
 
-    async create({ origin, destination }) {
+    async create({ origin, destination, status }) {
 
         let flight;
 
@@ -53,7 +53,8 @@ class FlightRepository {
             flight = await flightModel.create({
                 id: v4(),
                 origin,
-                destination
+                destination,
+                status
             });
 
         } catch(e) {

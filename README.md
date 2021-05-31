@@ -14,7 +14,6 @@ TODO
 
 - [ ] Implement validations in backend and frontend to improve user interaction.
 - [ ] Implement a framework such as Angular, React, Vue or Svelte for the frontend.
-- [ ] Handling with asynchronous scraping
 
 ## OSS used
 

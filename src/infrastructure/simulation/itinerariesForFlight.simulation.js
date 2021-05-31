@@ -41,12 +41,12 @@ const ItinerariesForFlight = async({ origin, destination }) => {
 
             // Input origin
             await page.click("div[role=search] > div[jscontroller] > div[class]:nth-child(2) > div[class]:first-child > div[class]:not([jsname]):nth-child(1) > div");
-            await page.type("div[role=search] > div[jscontroller] > div[class]:nth-child(2) > div[class]:first-child > div[class]:not([jsname]):nth-child(1) > div", origin, { delay: 500 });
+            await page.type("div[role=search] > div[jscontroller] > div[class]:nth-child(2) > div[class]:first-child > div[class]:not([jsname]):nth-child(1) > div", origin, { delay: 750 });
             await page.click("div[role=search] ul[role=listbox][jsaction] > li");
 
             // Input destination
             await page.click("div[role=search] > div[jscontroller] > div[class]:nth-child(2) > div[class]:first-child > div[class]:not([jsname]):nth-child(4) > div");
-            await page.type("div[role=search] > div[jscontroller] > div[class]:nth-child(2) > div[class]:first-child > div[class]:not([jsname]):nth-child(4) > div", destination, { delay: 500 });
+            await page.type("div[role=search] > div[jscontroller] > div[class]:nth-child(2) > div[class]:first-child > div[class]:not([jsname]):nth-child(4) > div", destination, { delay: 750 });
             await page.click("div[role=search] ul[role=listbox][jsaction] > li");
 
             // Search
@@ -66,28 +66,30 @@ const ItinerariesForFlight = async({ origin, destination }) => {
 
                 for (let i = 0; i < quantityOfPaths; i++) {
 
-                    let { date, positionX, positionY } = await page.evaluate((i) => {
+                    let { positionX, positionY } = await page.evaluate((i) => {
 
                         let paths = Array.from(document.querySelectorAll("span[jsslot] div[jsmodel] div[jscontroller] > div[jsaction] svg path"));
                         let path = paths[i];
-                        let date = path.getAttribute("data-id");
                         let { x: positionX, y: positionY } = path.getBoundingClientRect();
-                        return { date, positionX, positionY };
+                        return { positionX, positionY };
 
                     }, i);
 
                     await page.mouse.click(positionX, positionY);
 
-                    let price = await page.evaluate(() => {
+                    let { departDate, returnDate, price } = await page.evaluate(() => {
 
-                        let price = document.querySelector("span[jsslot] div[jsmodel] div[jscontroller] div[jsaction] > div:last-child span");
-                        if (price) price = price.innerHTML.replace(/&nbsp;/g, ' ');
+                        let price, departDate, returnDate;
+                        let datesDOM = document.querySelector("span[jsslot] div[jsmodel] div[jscontroller] div[jsaction] > div:last-child > div");
+                        let priceDOM = document.querySelector("span[jsslot] div[jsmodel] div[jscontroller] div[jsaction] > div:last-child span");
+                        if (priceDOM) price = priceDOM.innerHTML.replace(/&nbsp;/g, ' ');
+                        if (datesDOM) ([ departDate, returnDate ] = datesDOM.innerHTML.split(" - "));
                         
-                        return price;
+                        return { departDate, returnDate, price };
     
                     });
 
-                    if (!itineraries.find(itinerary => itinerary.date == date && price)) partialsItineraries = [ ...partialsItineraries, { date, price } ];
+                    if (!itineraries.find(itinerary => itinerary.departDate == departDate && itinerary.returnDate == returnDate) && departDate && returnDate && price) partialsItineraries = [ ...partialsItineraries, { departDate, returnDate, price } ];
 
                 }
 

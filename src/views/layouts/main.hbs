@@ -40,7 +40,7 @@
         const launchScraper = async({ origin, destination }) => {
 
             const response = await fetch(
-                `http://${location.host}/api/scraper/`,
+                `http://${location.host}/api/flights/`,
                 {
                     method: "POST",
                     headers: {

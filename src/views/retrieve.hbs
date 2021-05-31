@@ -3,8 +3,9 @@
         <thead>
             <tr>
                 <th scope="col">Id</th>
+                <th scope="col">Depart Date</th>
+                <th scope="col">Return Date</th>
                 <th scope="col">Price</th>
-                <th scope="col">Date</th>
             </tr>
         </thead>
         <tbody>
@@ -15,7 +16,7 @@
 
     const getFlight = async({ flightId }) => {
         const response = await fetch(
-            `http://${location.host}/api/flights/${flightId}`,
+            `http://${location.host}/api/flights/${flightId}/itineraries`,
             {
                 method: "GET",
             }
@@ -29,21 +30,23 @@
 
         itineraries.forEach(itinerary => {
 
-            let { id, currency, price, createdAt } = itinerary;
-            if (createdAt) [ createdAt ] = createdAt.split("T");
+            let { id, departDate, returnDate, price } = itinerary;
             let tagContainer = document.createElement("tr");
             let tagId = document.createElement("th");
+            let tagDepartDate = document.createElement("td");
+            let tagReturnDate = document.createElement("td");
             let tagPrice = document.createElement("td");
-            let tagDate = document.createElement("td");
 
             tagId.setAttribute("scope", "row");
             tagId.innerText = id;
+            tagDepartDate.innerText = departDate;
+            tagReturnDate.innerText = returnDate;
             tagPrice.innerText = price;
-            tagDate.innerText = createdAt;
 
             tagContainer.appendChild(tagId);
+            tagContainer.appendChild(tagDepartDate);
+            tagContainer.appendChild(tagReturnDate);
             tagContainer.appendChild(tagPrice);
-            tagContainer.appendChild(tagDate);
             bodyTable.appendChild(tagContainer);
 
         });

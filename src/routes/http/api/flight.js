@@ -1,8 +1,9 @@
 const { Router } = require("express");
 const router = Router();
-const { flightController } = require("./../../../controllers/api");
+const { flightsController, itinerariesController } = require("./../../../controllers/api");
 
-router.get("/", (req, res) => flightController.list(req, res));
-router.get("/:flightId", (req, res) => flightController.retrieve(req, res));
+router.get("/", (req, res) => flightsController.list(req, res));
+router.get("/:flightId/itineraries", (req, res) => itinerariesController.list(req, res));
+router.post("/", (req, res) => flightsController.create(req, res));
 
 module.exports = router;

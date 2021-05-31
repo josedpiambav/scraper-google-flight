@@ -16,6 +16,10 @@ module.exports = (sequelize) => {
         destination: {
             allowNull: false,
             type: DataTypes.STRING
+        },
+        status: {
+            allowNull: false,
+            type: DataTypes.ENUM("SCHEDULE", "PROCESSING", "COMPLETED")
         }
 	});
 

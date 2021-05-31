@@ -5,6 +5,7 @@
                 <th scope="col">Id</th>
                 <th scope="col">Origin</th>
                 <th scope="col">Destination</th>
+                <th scope="col">Status</th>
                 <th scope="col">Date</th>
             </tr>
         </thead>
@@ -30,12 +31,13 @@
 
         flights.forEach(flight => {
 
-            let { id, origin, destination, createdAt } = flight;
+            let { id, origin, destination, status, createdAt } = flight;
             if (createdAt) [ createdAt ] = createdAt.split("T");
             let tagContainer = document.createElement("tr");
             let tagId = document.createElement("th");
             let tagOrigin = document.createElement("td");
             let tagDestination = document.createElement("td");
+            let tagStatus = document.createElement("td");
             let tagDate = document.createElement("td");
 
             tagContainer.setAttribute("flight-id", id);
@@ -47,11 +49,13 @@
             tagId.innerText = id;
             tagOrigin.innerText = origin;
             tagDestination.innerText = destination;
+            tagStatus.innerText = status;
             tagDate.innerText = createdAt;
 
             tagContainer.appendChild(tagId);
             tagContainer.appendChild(tagOrigin);
             tagContainer.appendChild(tagDestination);
+            tagContainer.appendChild(tagStatus);
             tagContainer.appendChild(tagDate);
             bodyTable.appendChild(tagContainer);
 

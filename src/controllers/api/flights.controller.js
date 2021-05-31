@@ -1,6 +1,6 @@
-const { listFlights, retrieveFlight } = require("./../../domain/flight");
+const { listFlights, createFlight } = require("../../domain/flights");
 
-class FlightController {
+class FlightsController {
 
     constructor() {}
 
@@ -8,7 +8,7 @@ class FlightController {
 
         try {
             
-            const flights = await listFlights.handle();
+            const flights = await listFlights.handler();
             res.json(flights).status(200);
 
         } catch (e) {
@@ -21,14 +21,13 @@ class FlightController {
 
     }
 
-    async retrieve(req, res) {
+    async create(req, res) {
 
         try {
             
-            const { flightId } = req.params;
-            const { flight, itineraries } = await retrieveFlight.handle({ flightId });
-            if (!flight) res.json({ flight: "Flight not exists" }).status(404);
-            res.json({ flight, itineraries }).status(200);
+            const { origin, destination } = req.body;
+            const flight = await createFlight.handler({ origin, destination });
+            res.json(flight).status(200);
 
         } catch (e) {
 
@@ -42,4 +41,4 @@ class FlightController {
 
 }
 
-module.exports = new FlightController;
+module.exports = new FlightsController;

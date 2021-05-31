@@ -4,13 +4,13 @@ class ListFligths {
 
     constructor() {}
 
-    async handle() {
+    async handler() {
 
         let flights = [];
 
         try {
 
-            flights = await flightRepository.list();
+            flights = await flightRepository.list({});
             
         } catch (e) {
 

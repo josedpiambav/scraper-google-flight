@@ -5,13 +5,13 @@ class ItineraryRepository {
 
     constructor() {}
 
-    async listByFlightId({ flightId }) {
+    async list({ where }) {
 
         let itineraries = [];
 
         try {
 
-            itineraries = await itineraryModel.findAll({ where: { flightId } });
+            itineraries = await itineraryModel.findAll({ where });
 
         } catch(e) {
 

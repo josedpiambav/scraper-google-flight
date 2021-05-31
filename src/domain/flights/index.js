@@ -1,7 +1,7 @@
 const listFlights = require("./listFlights.domain");
-const retrieveFlight = require("./retrieveFlight.domain");
+const createFlight = require("./createFlight.domain");
 
 module.exports = {
     listFlights,
-    retrieveFlight
+    createFlight
 }

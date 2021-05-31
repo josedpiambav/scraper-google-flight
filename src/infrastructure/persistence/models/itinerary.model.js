@@ -9,9 +9,13 @@ module.exports = (sequelize) => {
 			primaryKey: true,
 			type: DataTypes.STRING
 		},
-        date: {
+        departDate: {
             allowNull: false,
-            type: DataTypes.DATE
+            type: DataTypes.STRING
+        },
+        returnDate: {
+            allowNull: false,
+            type: DataTypes.STRING
         },
         price: {
             allowNull: false,

@@ -7,6 +7,9 @@ const handlebars = require('express-handlebars');
 // Import main router
 const { httpRouter } = require("./routes");
 
+// Import cronjobs
+const cronjobs = require("./cronjob");
+
 // Import database connection
 const { databaseConnection } = require("./infrastructure/persistence");
 
@@ -38,6 +41,7 @@ httpServer.use(httpRouter);
 
     await databaseConnection();
     httpServer.listen(process.env.PORT, process.env.HOST);
+    for (let cronjob of cronjobs) cronjob.start();
     console.log(`Running on http://${process.env.HOST}:${process.env.PORT}`);
 
 })();

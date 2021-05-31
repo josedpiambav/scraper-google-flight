@@ -1,7 +1,7 @@
-const scraperController = require("./scraper.controller");
-const flightController = require("./flight.controller");
+const flightsController = require("./flights.controller");
+const itinerariesController = require("./itineraries.controller");
 
 module.exports = {
-    scraperController,
-    flightController
+    flightsController,
+    itinerariesController
 }
